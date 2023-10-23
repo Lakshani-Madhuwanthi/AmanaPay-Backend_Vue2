@@ -1,17 +1,16 @@
 <template>
-  <b-navbar
-    type="is-primary"
+  <b-navbar align="center" justify="space-between"
   >
     <template #brand>
       <b-navbar-item tag="router-link" :to="{ path: '/dashboard' }">
         <img
-            src="../../assets/lanka_remit_logo.png"
+            src="../../assets/amana.png"
         >
       </b-navbar-item>
     </template>
     <template #start>
       <b-navbar-item>
-        <p class="navbar-title">Duty Free Admin Portal</p>
+        <!-- <p class="navbar-title">Duty Free Admin Portal</p> -->
       </b-navbar-item>
     </template>
 

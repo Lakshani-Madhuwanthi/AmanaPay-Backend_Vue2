@@ -89,7 +89,7 @@ export default {
           password: self.loginData.password.value
         }
 
-        await NetworkManager.apiRequest('api/dutyfree/DFAuth', data,
+        await NetworkManager.apiRequest('api/Auth', data,
             function (e) {
               
               let params = {
@@ -200,7 +200,6 @@ export default {
 
         self.crIsLoading = false
       })
-      console.log('hi from handleTCAccepted');
     },
     handleTCRejected(){
       this.tcAccepted = 1
@@ -214,7 +213,7 @@ export default {
 
 <style scoped>
 .hero{
-  background-image: url(../assets/image.png);
+  background-image: url(../assets/Login.png);
   background-size: cover;
 }
 </style>

@@ -247,7 +247,7 @@ export default {
       const  self = this
 
       self.showFullScreenLoader()
-      NetworkManager.apiRequest('api/dutyfree/DFUser/list', {}, function (e){
+      NetworkManager.apiRequest('api/User/list', {}, function (e){
         if(e.statusCode === 200){
           self.crData = e.data.changeRequests
           self.users = e.data.users

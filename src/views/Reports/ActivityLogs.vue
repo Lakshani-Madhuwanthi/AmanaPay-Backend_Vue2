@@ -6,7 +6,7 @@
           <b-breadcrumb
               align="is-left"
           >
-            <b-breadcrumb-item tag='router-link' to="" active >Customer Report</b-breadcrumb-item>
+            <b-breadcrumb-item tag='router-link' to="" active >Activity Log Report</b-breadcrumb-item>
           </b-breadcrumb>
         </div>
         <div class="column">
@@ -40,8 +40,8 @@
               trap-focus>
           </b-datetimepicker>
         </b-field>
-        <b-field class="column is-one-fifths is-small" label="NIC/Passport" label-position="on-border">
-          <b-input v-model="uid" @blur="uid = uid.trim()" maxlength="30" size="is-small"></b-input>
+        <b-field class="column is-one-fifths is-small" label="Username" label-position="on-border">
+          <b-input v-model="username" @blur="username = username.trim()" maxlength="30" size="is-small"></b-input>
         </b-field>
         <b-field  class="column" label="">
           <div class="buttons">
@@ -83,40 +83,32 @@
           {{ props.row.id }}
         </b-table-column>
 
-        <b-table-column field="purchase_date" label="Purchase Date" sortable centered v-slot="props" >
-                <span class="tag is-success">
-                    {{ new Date(props.row.purchase_date).toLocaleString() }}
+        <b-table-column field="level" label="Log Level" width="200" sortable numeric v-slot="props" sticky>
+          <span :class="'tag is-' + props.row.level.toLowerCase()">{{ props.row.level }}</span>
+        </b-table-column>
+
+        <b-table-column field="type" label="Log Type" width="200" sortable numeric v-slot="props" sticky>
+          {{ props.row.type }}
+        </b-table-column>
+
+        <b-table-column field="user" label="User" width="200" sortable numeric v-slot="props" sticky>
+          {{ props.row.user }}
+        </b-table-column>
+
+        <b-table-column field="description" label="Description" width="1000" numeric v-slot="props" sticky>
+          {{ props.row.description }}
+        </b-table-column>
+
+        <b-table-column field="created_at" label="Created At" sortable centered v-slot="props">
+                <span class="tag is-success expanded-col">
+                    {{ new Date(props.row.created_at).toLocaleString() }}
                 </span>
         </b-table-column>
 
-        <b-table-column field="nic" label="NIC" sortable numeric v-slot="props" centered>
-          {{ props.row.nic }}
-        </b-table-column>
-
-        <b-table-column field="current_passport" label="Current Passport" width="200" sortable numeric v-slot="props" centered>
-          {{ props.row.current_passport }}
-        </b-table-column>
-
-        <b-table-column field="merchant" label="Merchant" width="200" numeric v-slot="props" centered>
-          {{ props.row.merchant }}
-        </b-table-column>
-
-        <b-table-column field="invoice_number" label="Invoice Number" width="200" numeric v-slot="props" centered>
-          {{ props.row.invoice_number }}
-        </b-table-column>
-
-        <b-table-column field="claimed_amount" label="Claimed Amount (USD)" width="200" numeric v-slot="props" centered>
-          {{ props.row.claimed_amount }}
-        </b-table-column>
-
-        <b-table-column field="custom_officer" label="Custom Officer" width="200" numeric v-slot="props" centered>
-          {{ props.row.custom_officer }}
-        </b-table-column>
-
-        <b-table-column field="status" label="Status" sortable v-slot="props" width="200" centered>
-          <span :class="'tag ' + getTagColor(props.row.status)">
-            {{ props.row.status }}
-          </span>
+        <b-table-column field="updated_at" label="Updated At" sortable centered v-slot="props">
+                <span class="tag is-success expanded-col">
+                    {{ new Date(props.row.updated_at).toLocaleString() }}
+                </span>
         </b-table-column>
 
       </b-table>
@@ -131,7 +123,7 @@ import {appSettings} from "@/appSettings"
 import {TransactionExportWizard} from "@/views/Reports/Supports";
 
 export default {
-  name: 'CustomerReport',
+  name: 'ActivityLogs',
   components: {
   },
   data() {
@@ -140,11 +132,11 @@ export default {
       toDate: new Date(),
       filterChanged: false,
 
-      uid: '',
+      username: '',
       transactions: [],
       filteredList: [],
 
-      exportWizard: new TransactionExportWizard("Customer Report"),
+      exportWizard: new TransactionExportWizard("Activity Logs"),
 
       tableOptions: {
         isPaginated: true,
@@ -182,7 +174,7 @@ export default {
 
   methods: {
     getImageUrl: function (path){
-      return appSettings.$api_url + "/" + path+ "?" + new Date().getTime()
+      return appSettings.$api_url + path+ "?" + new Date().getTime()
     },
 
     generateXlsx: function (){
@@ -193,7 +185,7 @@ export default {
           self.authUser().username,
           self.fromDate,
           self.toDate,
-          "customerReport_" + self.formatDate(new Date()),
+          "activityLogs_" + self.formatDate(new Date()),
           self.tableHeaders,
           self.filteredList
       )
@@ -207,7 +199,7 @@ export default {
           self.authUser().username,
           self.fromDate,
           self.toDate,
-          "customerReport_" + self.formatDate(new Date()),
+          "activityLogs_" + self.formatDate(new Date()),
           self.tableHeaders,
           self.filteredList
       )
@@ -230,14 +222,14 @@ export default {
       let data = {
         from: self.formatDateTime(self.fromDate),
         to: self.formatDateTime(self.toDate),
-        uid: self.uid
+        username: self.username
       }
 
       self.showFullScreenLoader()
 
-      NetworkManager.apiRequest('api/dutyfree/DFCustom/customer-report', data, function (e){
+      NetworkManager.apiRequest('api/report/get-activity-report', data, function (e){
         if(e.statusCode === 200){
-          self.transactions = e.data.filteredList
+          self.transactions = e.data.logs
           self.filteredList = e.data.filteredList
           self.tableHeaders = e.data.fields
           self.filterChanged = false
@@ -246,19 +238,6 @@ export default {
         self.hideFullScreenLoader()
       })
     },
-
-    getTagColor: function (status) {
-      switch (status) {
-        case 'PENDING':
-          return 'is-warning'
-        case 'APPROVED':
-          return 'is-success'
-        case 'REJECTED':
-          return 'is-danger'
-        default:
-          return 'is-dark'
-      }
-    }
 
   },
 

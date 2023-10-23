@@ -1,9 +1,7 @@
 import Layout from "@/layout";
 import Auth from "@/middlewares/auth";
 import User from "@/mixins/modules/authMixins";
-import Merchants from "@/views/Merchant/MerchantList";
-import CreateMerchant from "@/views/Merchant/MerchantCreate";
-import EditMerchant from "@/views/Merchant/MerchantEdit";
+import Dashboard_Dutyfree from "@/views/Dashboard_Dutyfree/Dashboard";
 import Users from "@/views/User/UserList";
 import CreateUser from "@/views/User/UserCreate";
 import EditUser from "@/views/User/UserEdit";
@@ -14,24 +12,20 @@ import ResetPassword from "@/views/User/ResetPassword";
 import BankList from "@/views/Bank/BankList";
 import BankEdit from "@/views/Bank/BankEdit";
 import BankCreate from "@/views/Bank/BankCreate"
-import Dashboard_Dutyfree from "@/views/Dashboard_Dutyfree/Dashboard";
-import Dashboard_DutyfreeSL from "@/views/Dashboard_DutyfreeSL/Dashboard";
-// import Dashboard_DutyfreeBank from "@/views/Dashboard_DutyfreeBank/Dashboard";
-import DutyFreeMerchant from "@/views/DutyFreeMerchant/DutyFreeMerchant"
-import PurchaseDutyFreeMerchant from "@/views/DutyFreeMerchant/DutyFreeMerchantPurchase"
-import DutyFreeSLCustoms from "@/views/DutyFreeSLCustoms/DutyFreeSLCustoms"
-import DutyFreePendingRequests from "@/views/DutyFreeRequests/DutyFreePendingRequests"
-import DutyFreeRequests from "@/views/DutyFreeRequests/DutyFreeRequests"
-import DutyFreeRequestsAction from "@/views/DutyFreeRequests/DutyFreeRequestsAction"
-import DutyFreeCustomers from "@/views/DutyFreeCustomers/DutyFreeCustomers"
-import CreateDutyFreeCustomers from "@/views/DutyFreeCustomers/DutyFreeCustomersCreate"
-import DutyFreeUpdateTodaysRate from "@/views/DutyFreeUpdateTodaysRate/DutyFreeUpdateTodaysRate"
-import Dashboard from "@/views/Dashboard/Dashboard";
-import CustomerReport from "@/views/Reports/CustomerReport";
-import MerchantReport from "@/views/Reports/MerchantReport";
-import RequestReport from "@/views/Reports/RequestReport";
-import CustomerReportMerchantView from "@/views/Reports/CustomerReportMerchantView";
-
+import AppUserList from "@/views/AppUser/AppUserList";
+import AppVersionList from "@/views/AppVersion/AppVersionList";
+import AppVersionCreate from "@/views/AppVersion/AppVersionCreate";
+import IPGProviderList from "@/views/IPGProvider/IPGProviderList";
+import AdvertisementList from "@/views/Advertisement/AdvertisementList";
+import AdvertisementCreate from "@/views/Advertisement/AdvertisementCreate";
+import AdvertisementEdit from "@/views/Advertisement/AdvertisementEdit";
+import KYC from "@/views/KYC/KYC";
+import BillTransactions from "@/views/Reports/BillTransactions";
+import CeftTransactions from "@/views/Reports/CeftTransactions";
+import ThyagaTransactions from "@/views/Reports/ThyagaTransactions";
+import InsuranceTransactions from "@/views/Reports/InsuranceTransactions";
+import EChannellingTransactions from "@/views/Reports/EChannellingTransactions";
+import ActivityLogs from "@/views/Reports/ActivityLogs";
 
 const routes = [
     {
@@ -76,36 +70,9 @@ const routes = [
             title: 'Dashboard', isActive: false},
         children: [
             {
-                path: '/dashboard',
-                name: 'Dashboard',
-                component: Dashboard,
-                meta: {
-                    type: '', icon: 'view-dashboard', title: 'Dashboard',
-                    isActive: false, middleware: [Auth]
-                }
-            },
-            // {
-            //     path: '/dashboard/dutyfree/bank',
-            //     name: 'DashboardDFBank',
-            //     component: Dashboard_DutyfreeBank,
-            //     meta: {
-            //         type: '', icon: 'view-dashboard', title: 'Dashboard',
-            //         isActive: false, middleware: [Auth]
-            //     }
-            // },
-            {
                 path: '/dashboard/dutyfree/ministry',
                 name: 'DashboardDFMinistry',
                 component: Dashboard_Dutyfree,
-                meta: {
-                    type: '', icon: 'view-dashboard', title: 'Dashboard',
-                    isActive: false, middleware: [Auth]
-                }
-            },
-            {
-                path: '/dashboard/dutyfree/customs',
-                name: 'DashboardDFCustoms',
-                component: Dashboard_DutyfreeSL,
                 meta: {
                     type: '', icon: 'view-dashboard', title: 'Dashboard',
                     isActive: false, middleware: [Auth]
@@ -181,144 +148,71 @@ const routes = [
                 meta: { type: '', isActive: false, middleware: [Auth]  }
             },
             {
-                path: '/merchants',
-                name: 'Merchants',
-                isVisible: () => { return User.hasPermission("df-merchant-view") },
-                component: Merchants,
-                meta: {
-                    type: 'menu-item', title: 'Merchants', icon: 'store',
-                    isActive: false, middleware: [Auth]
-                }
-            },
-
-            {
-                path: '/merchants/create',
-                name: 'CreateMerchant',
-                component: CreateMerchant,
-                meta: { type: '', isActive: false, middleware: [Auth] }
+                path: '/provider',
+                name: 'IPGProvider',
+                isVisible: () => {return User.hasPermission("ipg-provider-view")},
+                component: IPGProviderList,
+                meta: { type: 'menu-item', title: 'IPG Providers', icon: 'home', isActive: false, middleware: [Auth]  }
             },
             {
-                path: '/merchants/edit/:id',
-                name: 'EditMerchant',
-                component: EditMerchant,
-                meta: { type: '', isActive: false, middleware: [Auth] }
+                path: '/advertisements',
+                name: 'Advertisements',
+                isVisible: () => {return User.hasPermission("advertisement-view")},
+                component: AdvertisementList,
+                meta: { type: 'menu-item', title: 'Advertisements', icon: 'television-classic', isActive: false, middleware: [Auth]  }
+            },
+            {
+                path: '/advertisements/create',
+                name: 'CreateAdvertisement',
+                component: AdvertisementCreate,
+                meta: { type: '', isActive: false, middleware: [Auth]  }
+            },
+            {
+                path: '/advertisements/edit/:id',
+                name: 'EditAdvertisement',
+                component: AdvertisementEdit,
+                meta: { type: '', isActive: false, middleware: [Auth]  }
+            },
+            {
+                path: '/appUsers',
+                name: 'AppUser',
+                isVisible: () => {return User.hasPermission("app-user-view")},
+                component: AppUserList,
+                meta: { type: 'menu-item', title: 'App Users', icon: 'account-card-outline', isActive: false, middleware: [Auth]  }
+            },
+            {
+                path: '/appVersions',
+                name: 'AppVersion',
+                isVisible: () => {return User.hasPermission("app-version-view")},
+                component: AppVersionList,
+                meta: { type: 'menu-item', title: 'App Versions', icon: 'cellphone-play', isActive: false, middleware: [Auth]  }
+            },
+            {
+                path: '/appVersions/create',
+                name: 'AppVersionCreate',
+                component: AppVersionCreate,
+                meta: { type: '', isActive: false, middleware: [Auth]  }
             },
         ]
         },
-    {
-        path: '/#',
-        component: Layout,
-        isVisible: () => {
-            return User.hasPermission("df-bank-view") ||
-                User.hasPermission("df-cbsl-view") || User.hasPermission("df-merchant-data-view") ||
-                User.hasPermission("df-customs-view")
+        {
+            path: '/KYC',
+            component: Layout,
+            isVisible: () => {return User.hasPermission("kyc-view")},
+            redirect: 'KYC',
+            meta: { type: 'menu', icon: 'account-check',
+                title: 'KYC', isActive: false},
+            children: [
+                {
+                    path: '/KYC',
+                    name: 'KYC',
+                    component: KYC,
+                    meta: { type: '', icon: 'account-check', title: 'KYC',
+                        isActive: false, middleware: [Auth]}
+                }
+            ]
         },
-        redirect: '',
-        meta: {type: 'menu', icon: 'hand-extended', title: 'Duty Free', isActive: false},
-        children: [
-            {
-                path: '/dutyFreeMerchant',
-                name: 'DutyFreeMerchant',
-                isVisible: () => {
-                    return User.hasPermission("df-merchant-data-view") || User.hasSuperPermission()
-                },
-                component: DutyFreeMerchant,
-                meta: {
-                    type: 'menu-item', title: 'Duty Free Merchants', icon: 'store',
-                    isActive: false, middleware: [Auth]
-                }
-            },
-            {
-                path: '/dutyFreeMerchantPurchase',
-                name: 'PurchaseDutyFreeMerchant',
-                isVisible: () => {
-                    return User.hasPermission("df-merchant-data-view") || User.hasSuperPermission()
-                },
-                component: PurchaseDutyFreeMerchant,
-                meta: {type: '', isActive: false, middleware: [Auth]}
-
-            },
-            {
-                path: '/dutyFreeSLCustoms',
-                name: 'dutyFreeSLCustoms',
-                isVisible: () => {
-                    return User.hasPermission("df-customs-view") || User.hasSuperPermission()
-                },
-                component: DutyFreeSLCustoms,
-                meta: {
-                    type: 'menu-item', title: 'Duty FreeSL Customs', icon: 'account-tie-hat',
-                    isActive: false, middleware: [Auth]
-                }
-            },
-            {
-                path: '/DutyFreePendingRequests',
-                name: 'DutyFreePendingRequests',
-                isVisible: () => {
-                    return User.hasPermission("df-bank-view") && !User.hasSuperPermission()
-                },
-                component: DutyFreePendingRequests,
-                meta: {
-                    type: 'menu-item', title: 'Duty Free Pending Requests', icon: 'hand-coin',
-                    isActive: false, middleware: [Auth]
-                }
-            },
-            {
-                path: '/dutyFreeRequests',
-                name: 'dutyFreeRequests',
-                isVisible: () => {
-                    return User.hasPermission("df-bank-view") && !User.hasSuperPermission()
-                },
-                component: DutyFreeRequests,
-                meta: {
-                    type: 'menu-item', title: 'Duty Free Requests', icon: 'receipt-text',
-                    isActive: false, middleware: [Auth]
-                }
-            },
-            {
-                path: '/dutyFreeRequests/DutyFreeRequestsAction',
-                name: 'DutyFreeRequestsAction',
-                isVisible: () => {
-                    return User.hasPermission("df-bank-view") && !User.hasSuperPermission()
-                },
-                component: DutyFreeRequestsAction,
-                meta: {type: '', isActive: false, middleware: [Auth]}
-            },
-            {
-                path: '/dutyFreeCustomers',
-                name: 'dutyFreeCustomers',
-                isVisible: () => {
-                    return User.hasPermission("df-bank-view")
-                },
-                component: DutyFreeCustomers,
-                meta: {
-                    type: 'menu-item', title: 'Duty Free Customers', icon: 'account-cash',
-                    isActive: false, middleware: [Auth]
-                }
-            },
-            {
-                path: '/dutyFreeCustomers/create/:nic',
-                name: 'CreateDutyFreeCustomers',
-                isVisible: () => {
-                    return User.hasPermission("df-bank-view")
-                },
-                component: CreateDutyFreeCustomers,
-                meta: {type: '', isActive: false, middleware: [Auth]}
-            },
-            {
-                path: '/dutyFreeUpdateTodaysRate',
-                name: 'DutyFreeUpdateTodaysRate',
-                isVisible: () => {
-                    return User.hasPermission("df-cbsl-view")
-                },
-                component: DutyFreeUpdateTodaysRate,
-                meta: {
-                    type: 'menu-item', title: 'Daily Exchange Rates', icon: 'update',
-                    isActive: false, middleware: [Auth]
-                }
-            },
-
-        ]
-    },
+    
 
     {
         path: '/#',
@@ -330,38 +224,52 @@ const routes = [
         meta: { type: 'menu', icon: 'script-text', title: 'Reports', isActive: false},
         children: [
             {
-                path: '/report/customer',
-                name: 'CustomerReport',
-                isVisible: () => {return User.hasPermission("df-report-view") || User.hasPermission("df-customs-view") },
-                component: CustomerReport,
-                meta: { type: 'menu-item', title: 'Customer Report', icon: 'receipt-text',
+                path: '/transaction/bill',
+                name: 'BillTransaction',
+                isVisible: () => {return User.hasPermission("bill-payment-report-view")},
+                component: BillTransactions,
+                meta: { type: 'menu-item', title: 'Bill Transactions', icon: 'receipt-text',
                     isActive: false, middleware: [Auth]  }
             },
             {
-                path: '/report/customerReportMerchantView',
-                name: 'CustomerReportMerchantView',
-                isVisible: () => {return User.hasPermission("df-merchant-data-view") && !User.hasSuperPermission()},
-                component: CustomerReportMerchantView,
-                meta: { type: 'menu-item', title: 'Customer Report', icon: 'receipt-text',
+                path: '/transaction/ceft',
+                name: 'CEFTTransaction',
+                isVisible: () => {return User.hasPermission("send-money-report-view")},
+                component: CeftTransactions,
+                meta: { type: 'menu-item', title: 'Send Money Transactions', icon: 'cash-fast',
                     isActive: false, middleware: [Auth]  }
             },
             {
-                path: '/report/Requests',
-                name: 'RequestReport',
-                isVisible: () => {return User.hasPermission("df-lankapay-report-view")},
-                component: RequestReport,
-                meta: { type: 'menu-item', title: 'Request Report', icon: 'receipt-text',
+                path: '/transaction/thyaga',
+                name: 'ThyagaTransaction',
+                isVisible: () => {return User.hasPermission("thyaga-report-view")},
+                component: ThyagaTransactions,
+                meta: { type: 'menu-item', title: 'Thyaga Transactions', icon: 'gift',
                     isActive: false, middleware: [Auth]  }
             },
-
             {
-                path: '/report/merchant',
-                name: 'MerchantReport',
-                isVisible: () => {return User.hasPermission("df-report-view")},
-                component: MerchantReport,
-                meta: { type: 'menu-item', title: 'Merchant Report', icon: 'receipt-text',
+                path: '/transaction/eChannelling',
+                name: 'EChannellingTransaction',
+                isVisible: () => {return User.hasPermission("echannelling-report-view")},
+                component: EChannellingTransactions,
+                meta: { type: 'menu-item', title: 'EChannelling Transactions', icon: 'medical-bag',
                     isActive: false, middleware: [Auth]  }
-            }
+            },
+            {
+                path: '/transaction/insurance',
+                name: 'InsuranceTransaction',
+                isVisible: () => {return User.hasPermission("insurance-report-view")},
+                component: InsuranceTransactions,
+                meta: { type: 'menu-item', title: 'Insurance Transactions', icon: 'account-child',
+                    isActive: false, middleware: [Auth]  }
+            },
+            {
+                path: '/activityLogs',
+                name: 'ActivityLogs',
+                isVisible: () => {return User.hasPermission("activity-log-report-view")},
+                component: ActivityLogs,
+                meta: { type: 'menu-item', title: 'Activity Log Report', icon: 'format-list-text', isActive: false, middleware: [Auth]  }
+            },
         ]
     },
 ]

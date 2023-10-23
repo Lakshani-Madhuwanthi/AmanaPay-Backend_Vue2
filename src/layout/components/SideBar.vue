@@ -10,12 +10,6 @@
         open
     >
       <div class="p-1">
-        <div class="block">
-          <img
-              src="../../assets/lanka_remit_logo.png" class="logo-image"
-          />
-        </div>
-
         <b-menu class="is-custom-mobile" style="text-align: left" :activable="false">
           <b-menu-list label="Menu" style="text-align: left">
             <div v-for="item in menuItems" :key="item.id" >
